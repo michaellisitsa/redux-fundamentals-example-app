@@ -1,13 +1,13 @@
-const initialState = [
-  { id: 0, text: 'Learn React', completed: true },
-  { id: 1, text: 'Learn Redux', completed: false, color: 'purple' },
-  { id: 2, text: 'Build something fun!', completed: false, color: 'blue' },
-]
+const initialState = []
 
 function nextTodoId(todos) {
   const maxId = todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1)
   return maxId + 1
 }
+
+// Selector to be used in useSelector
+export const selectTodoById = (state, id) =>
+  state.todos.find((todo) => todo.id === id)
 
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
@@ -18,6 +18,7 @@ export default function todosReducer(state = initialState, action) {
           id: nextTodoId(state),
           text: action.payload,
           completed: false,
+          color: '',
         },
       ]
 
@@ -33,7 +34,16 @@ export default function todosReducer(state = initialState, action) {
         }
       })
     case 'todos/colorSelected':
-      break
+      return state.map((todo) => {
+        if (todo.id !== action.payload.todoId) {
+          return todo
+        }
+
+        return {
+          ...todo,
+          color: action.payload.color,
+        }
+      })
     case 'todos/todoDeleted':
       break
     case 'todos/todoCompleted':
