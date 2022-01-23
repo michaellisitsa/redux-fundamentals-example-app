@@ -30,7 +30,6 @@ function StatusFilter() {
 }
 function ColorFilter() {
   const selectedColors = useSelector(ColorFilters)
-  console.log(selectedColors)
   const dispatch = useDispatch()
 
   const handleChangedStatus = (e) => {
@@ -62,7 +61,6 @@ function Footer() {
     return uncompletedTodos.length
   })
 
-  console.log(`todos Remaining: ${todosRemaining}`)
   return (
     <div>
       <p>Remaining To Dos: {todosRemaining}</p>

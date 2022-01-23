@@ -44,6 +44,8 @@ export default function todosReducer(state = initialState, action) {
           color: action.payload.color,
         }
       })
+    case 'todos/todosLoaded':
+      return action.payload
     case 'todos/todoDeleted':
       break
     case 'todos/todoCompleted':
