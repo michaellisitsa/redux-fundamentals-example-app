@@ -13,7 +13,9 @@ function TodoListItem({ todoId }) {
 
   // get available colors, and populate a select box
   const colorOptions = availableColors.map((color) => (
-    <option value={color}>{capitalize(color)}</option>
+    <option key={color} value={color}>
+      {capitalize(color)}
+    </option>
   ))
 
   function handleColorChanged(e) {
