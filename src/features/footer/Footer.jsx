@@ -1,6 +1,10 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { StatusFilters, ColorFilters } from '../filters/filtersSlice'
+import {
+  StatusFilters,
+  ColorFilters,
+  colorFilterChanged,
+} from '../filters/filtersSlice'
 import { availableColors, capitalize } from '../filters/colors'
 import './Footer.css'
 
@@ -33,10 +37,7 @@ function ColorFilter() {
   const dispatch = useDispatch()
 
   const handleChangedStatus = (e) => {
-    dispatch({
-      type: 'filters/ColorFilterChanged',
-      payload: { name: e.target.id, checked: e.target.checked },
-    })
+    dispatch(colorFilterChanged(e.target.id, e.target.checked))
   }
 
   const colorOptions = availableColors.map((color) => (

@@ -1,13 +1,13 @@
 import React from 'react'
-import { useSelector, shallowEqual } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { selectTodoIds, selectFilteredTodoIds } from './todosSlice'
 import TodoListItem from './TodoListItem'
 
 // We can't create a new reference (e.g. with a map)
 // because then the component will always re-render for action dispatches.
-const selectTodoIds = (state) => state.todos.map((todo) => todo.id)
 
 function TodoList() {
-  const todoIds = useSelector(selectTodoIds, shallowEqual)
+  const todoIds = useSelector(selectFilteredTodoIds)
 
   // loop array
   const renderedListItems = todoIds.map((todoId) => (

@@ -3,6 +3,13 @@ const initialState = {
   colors: [],
 }
 
+export const colorFilterChanged = (color, changeType) => {
+  return {
+    type: 'filters/colorFilterChanged',
+    payload: { name: color, checked: changeType },
+  }
+}
+
 // needs to get just the selected status value.
 export const StatusFilters = (state) => state.filters.status
 export const ColorFilters = (state) => state.filters.colors
@@ -14,7 +21,7 @@ export default function filtersReducer(state = initialState, action) {
         ...state,
         status: action.payload,
       }
-    case 'filters/ColorFilterChanged':
+    case 'filters/colorFilterChanged':
       if (action.payload.checked) {
         return {
           ...state,
