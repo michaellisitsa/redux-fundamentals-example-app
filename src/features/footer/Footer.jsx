@@ -58,7 +58,9 @@ function ColorFilter() {
 
 function Footer() {
   const todosRemaining = useSelector((state) => {
-    const uncompletedTodos = state.todos.filter((todo) => !todo.completed)
+    const uncompletedTodos = state.todos.entities.filter(
+      (todo) => !todo.completed
+    )
     return uncompletedTodos.length
   })
 

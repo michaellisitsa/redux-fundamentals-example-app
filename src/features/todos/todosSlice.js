@@ -1,20 +1,23 @@
 import { client } from '../../api/client'
 import { createSelector } from 'reselect'
 
-const initialState = []
+const initialState = {
+  status: 'idle',
+  entities: [],
+}
 
 // Selector to be used in useSelector
 export const selectTodoById = (state, id) =>
-  state.todos.find((todo) => todo.id === id)
+  state.todos.entities.find((todo) => todo.id === id)
 
 export const selectTodoIds = createSelector(
-  (state) => state.todos,
+  (state) => state.todos.entities,
   (todos) => todos.map((todo) => todo.id)
 )
 
 // Filter by completed status
 export const selectFilteredTodos = createSelector(
-  (state) => state.todos,
+  (state) => state.todos.entities,
   (state) => state.filters,
   (todos, filters) => {
     const statusTodos =
@@ -41,6 +44,7 @@ export const selectFilteredTodoIds = createSelector(
 // If you need to pass actions, we need an action creator, which wraps the thunk middleware.
 export function fetchTodos() {
   return function fetchTodosThunk(dispatch, getState) {
+    dispatch(todosLoading())
     client.get('/fakeApi/todos').then((response) => {
       dispatch(todosLoaded(response.todos))
     })
@@ -70,34 +74,50 @@ export const todosLoaded = (todos) => {
   }
 }
 
+export const todosLoading = () => {
+  return {
+    type: 'todos/todosLoading',
+  }
+}
+
 export default function todosReducer(state = initialState, action) {
   switch (action.type) {
     case 'todos/todoAdded':
-      return [...state, action.payload]
+      return { ...state, entities: [...state.entities, action.payload] }
     case 'todos/todoToggled':
-      return state.map((todo) => {
-        if (todo.id !== action.payload) {
-          return todo
-        }
+      return {
+        ...state,
+        entities: state.entities.map((todo) => {
+          if (todo.id !== action.payload) {
+            return todo
+          }
 
-        return {
-          ...todo,
-          completed: !todo.completed,
-        }
-      })
+          return {
+            ...todo,
+            completed: !todo.completed,
+          }
+        }),
+      }
     case 'todos/colorSelected':
-      return state.map((todo) => {
-        if (todo.id !== action.payload.todoId) {
-          return todo
-        }
-
-        return {
-          ...todo,
-          color: action.payload.color,
-        }
-      })
+      return {
+        ...state,
+        entities: state.entities.map((todo) => {
+          if (todo.id !== action.payload.todoId) {
+            return todo
+          }
+          return {
+            ...todo,
+            color: action.payload.color,
+          }
+        }),
+      }
     case 'todos/todosLoaded':
-      return action.payload
+      return { status: 'idle', entities: action.payload }
+    case 'todos/todosLoading':
+      return {
+        ...state,
+        status: 'loading',
+      }
     case 'todos/todoDeleted':
       break
     case 'todos/todoCompleted':
