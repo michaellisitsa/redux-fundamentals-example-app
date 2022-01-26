@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { selectTodoIds, selectFilteredTodoIds } from './todosSlice'
+import { selectFilteredTodoIds } from './todosSlice'
 import TodoListItem from './TodoListItem'
 
 // We can't create a new reference (e.g. with a map)

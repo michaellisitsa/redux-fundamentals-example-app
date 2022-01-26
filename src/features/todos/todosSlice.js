@@ -15,14 +15,17 @@ export const selectTodoIds = createSelector(
 // Filter by completed status
 export const selectFilteredTodos = createSelector(
   (state) => state.todos,
-  (state) => state.filters.status,
-  (todos, status) => {
-    if (status === 'All') {
-      return todos
-    }
-    return todos.filter((todo) =>
-      status === 'Completed' ? todo.completed : !todo.completed
-    )
+  (state) => state.filters,
+  (todos, filters) => {
+    const statusTodos =
+      filters.status === 'All'
+        ? todos
+        : todos.filter((todo) =>
+            filters.status === 'Completed' ? todo.completed : !todo.completed
+          )
+    return filters.colors.length === 0
+      ? statusTodos
+      : statusTodos.filter((todo) => filters.colors.includes(todo.color))
   }
 )
 
